@@ -12,9 +12,18 @@ main = do
     
 	contents <- hGetContents output  
 	--hGetContents :: Handle -> IO String
-	putStr contents  
-	--String -> IO ()
+	createNinjas contents  
 	hClose output
+	
+createNinjas :: String -> IO()
+createNinjas contents = do 
+	let allLines = lines contents
+	--lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators )
+	print (allLines !! 0)
+	--Her bir satır. su an allLines listesinin içinde bir eleman.
+	--Bu elemanları name. country şeklinde parse edip ninja oluşturacağız
+	--Fonksiyonun return type'ı debug amaclı print yapabilmek için simdilik IO() 
+				
     
  
 data Ninja = Ninja {name:: String, country:: Char,
