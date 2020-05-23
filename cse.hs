@@ -14,18 +14,14 @@ main = do
 
   contents <- hGetContents output
   --hGetContents :: Handle -> IO String
-  createNinjas contents
+  
+  createNinjas (lines contents)
+  --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators )
   hClose output
 
-createNinjas :: String -> IO()
-createNinjas contents = do
-  let allLines = lines contents
-  --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators )
+createNinjas :: [String] -> IO()
+createNinjas allLines = do
   print (allLines !! 0)
-  --Her bir satır. su an allLines listesinin içinde bir eleman.
-  --Bu elemanları name. country şeklinde parse edip ninja oluşturacağız
-  --Fonksiyonun return type'ı debug amaclı print yapabilmek için simdilik IO()
-
   --ornek dummy ninja
   let sasuke = Ninja "sasuke" 'c' "fsdf" 33 22 "fds" "dsdf" 33 33
   --ilk satırı kelimelere bolmek için string arrayine donusturuyor
@@ -34,16 +30,7 @@ createNinjas contents = do
   let firstNinja = createOneNinja(firstLineAsList)
   --printlemeyi daha guzel yapmak amacıyla ninja için show fonksyionu yazılmalı
   print(firstNinja)
-  --her bir satırı recursive olarak çağıracak ve ninjaya donusturecek bir fonksiyon yazılabilir
-
-
-
-
-data Ninja = Ninja {name:: String, country:: Char,
-status:: String, exam1:: Float,
-exam2:: Float, ability1:: String,
-ability2:: String, r:: Int,
-score:: Int} deriving Show
+  
 
 --kelime listesinden sırayla alıp gerekli parametre olarak ninjaya veriyor
 --stringleri floata donusturmek icin read fonksiyonu kullandım
@@ -54,3 +41,20 @@ createOneNinja line = Ninja (line !! 0) ((line !! 1) !! 0) "" (read (line !! 2))
 convertLineToList :: String -> [String]
 convertLineToList givenLine =
   splitOn " " (givenLine)
+  
+data Ninja = Ninja {name:: String, country:: Char,
+status:: String, exam1:: Float,
+exam2:: Float, ability1:: String,
+ability2:: String, r:: Int,
+score:: Int} deriving Show
+
+fire :: [Ninja] -- add the junior ninjas of Land of Fire to that list
+fire = []
+lightning :: [Ninja] -- add the junior ninjas of Land of Lightning to that list
+lightning = []
+water :: [Ninja] -- add the junior ninjas of Land of Water to that list
+water = []
+wind :: [Ninja] -- add the junior ninjas of Land of Wind to that list
+wind = []
+earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
+earth = []
