@@ -42,13 +42,25 @@ convertLineToList :: String -> [String]
 convertLineToList givenLine =
   splitOn " " (givenLine)
   
+  
+var
+	s: Char
+addNinjaToList :: Ninja -> [Ninja]
+addNinjaToList nin
+  s:= nin.country
+  | s  == 'f' =  [nin] ++ fire
+  | s  == 'l' =  [nin] ++ lightning
+  | s  == 'w' =  [nin] ++ water
+  | s  == 'e' =  [nin] ++ earth
+  
+  
 data Ninja = Ninja {name:: String, country:: Char,
 status:: String, exam1:: Float,
 exam2:: Float, ability1:: String,
 ability2:: String, r:: Int,
 score:: Int} deriving Show
 
-fire :: [Ninja] -- add the junior ninjas of Land of Fire to that list
+fire :: [Ninja] -- add the junior ninjas of Land of Fire to that list 
 fire = []
 lightning :: [Ninja] -- add the junior ninjas of Land of Lightning to that list
 lightning = []
