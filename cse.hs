@@ -12,28 +12,24 @@ main = do
   --FilePath is just a type synonym for String, simply defined as: type FilePath = String
   --data IOMode = ReadMode | WriteMode | AppendMode | ReadWriteMode
 
-  contents <- hGetContents output
   --hGetContents :: Handle -> IO String
+  contents <- hGetContents output
   
-  createNinjas (lines contents)
-  --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators )
+  --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
+  let oneLine = getOneLine (lines contents)
+  let words   = convertLineToList (oneLine)
+  let aninja  = createOneNinja(words)
+  --fire ++ [aninja]   IO tipi (IO Ninja) dönmediği için hata veriyor. hem IO tipinde döndürüp hem listeye nasıl ekleriz?
+  print aninja
   hClose output
 
-createNinjas :: [String] -> IO()
-createNinjas allLines = do
-  print (allLines !! 0)
-  --ornek dummy ninja
-  let sasuke = Ninja "sasuke" 'c' "fsdf" 33 22 "fds" "dsdf" 33 33
-  --ilk satırı kelimelere bolmek için string arrayine donusturuyor
-  let firstLineAsList = convertLineToList (allLines !! 0)
-  --verilen arrayden ninja olusturuyor
-  let firstNinja = createOneNinja(firstLineAsList)
-  --printlemeyi daha guzel yapmak amacıyla ninja için show fonksyionu yazılmalı
-  print(firstNinja)
+--Her bir satırı array'e farklı eleman olarak dizilmiş string arrayinden ilk elemanı (ilk satırı) getirir
+getOneLine :: [String] -> String
+getOneLine allLines = case allLines of
+  []     -> ""
+  (x:_)  -> x
   
-
---kelime listesinden sırayla alıp gerekli parametre olarak ninjaya veriyor
---stringleri floata donusturmek icin read fonksiyonu kullandım
+--Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
 createOneNinja line = Ninja (line !! 0) ((line !! 1) !! 0) "" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
 
@@ -43,7 +39,7 @@ convertLineToList givenLine =
   splitOn " " (givenLine)
   
   
-var
+{-var
 	s: Char
 addNinjaToList :: Ninja -> [Ninja]
 addNinjaToList nin
@@ -51,7 +47,7 @@ addNinjaToList nin
   | s  == 'f' =  [nin] ++ fire
   | s  == 'l' =  [nin] ++ lightning
   | s  == 'w' =  [nin] ++ water
-  | s  == 'e' =  [nin] ++ earth
+  | s  == 'e' =  [nin] ++ earth-}
   
   
 data Ninja = Ninja {name:: String, country:: Char,
