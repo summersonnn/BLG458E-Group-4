@@ -16,24 +16,46 @@ main = do
   contents <- hGetContents output
   
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
-  let allLines = lines contents
-  let oneLine  = getOneLine allLines
-  let words    = convertLineToList (oneLine)
-  let aninja   = createOneNinja(words)
-  
+  let allLines  = lines contents
+  let oneLine   = getOneLine allLines
+  --let words     = convertLineToList (oneLine)
+  let aninja    = lineToNinja oneLine
+  --let aninja    = createOneNinja(words)
   print $ fire ++ [aninja]
+  
+  let a  = tail (tail (tail allLines))
+  let b   = getOneLine a
+  let c    = lineToNinja b
+  print $ wind ++ [c]
+  
+  let x  = tail (tail (tail a))
+  let y   = getOneLine x
+  let z    = lineToNinja y
+  print $ water ++ [z]
+
+  
   hClose output
   
-deneme :: [Ninja] -> Ninja -> [Ninja]
-deneme arr ninja = do
-  arr ++ [ninja]
-
+  
+lineToNinja :: String -> Ninja
+lineToNinja oneLine =
+  let 
+     words     = convertLineToList (oneLine)
+     aninja    = createOneNinja(words)
+  in (aninja)
+  
 --Her bir satırı array'e farklı eleman olarak dizilmiş string arrayinden ilk elemanı (ilk satırı) getirir
 getOneLine :: [String] -> String
 getOneLine allLines = case allLines of
   []     -> ""
   [x]    -> x
   (x:_)  -> x
+  
+getOneLineFromEnd :: [String] -> String
+getOneLineFromEnd y@(x:xs) = case y of
+  []       -> ""
+  [x]      -> x
+  (x:xs)   -> getOneLineFromEnd(xs)
   
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
@@ -43,17 +65,6 @@ createOneNinja line = Ninja (line !! 0) ((line !! 1) !! 0) "" (read (line !! 2))
 convertLineToList :: String -> [String]
 convertLineToList givenLine =
   splitOn " " (givenLine)
-  
-  
-{-var
-	s: Char
-addNinjaToList :: Ninja -> [Ninja]
-addNinjaToList nin
-  s:= nin.country
-  | s  == 'f' =  [nin] ++ fire
-  | s  == 'l' =  [nin] ++ lightning
-  | s  == 'w' =  [nin] ++ water
-  | s  == 'e' =  [nin] ++ earth-}
   
   
 data Ninja = Ninja {name:: String, country:: Char,
@@ -72,3 +83,26 @@ wind :: [Ninja] -- add the junior ninjas of Land of Wind to that list
 wind = []
 earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
 earth = []
+
+
+{-deneme :: [String] -> [String]
+deneme allLines@(x:xs) = do
+  let words = convertLineToList(x)
+  let aninja = createOneNinja(words)
+  fire ++ [aninja]
+  return (xs)-}
+  
+  {-zeynep :: [String] -> [Ninja]
+zeynep allLines@(x:xs) = case allLines of
+ [x]     -> fire ++ [lineToNinja x]
+ (x:xs)  -> fire ++ getOneLine(xs)-}
+  
+{-var
+	s: Char
+addNinjaToList :: Ninja -> [Ninja]
+addNinjaToList nin
+  s:= nin.country
+  | s  == 'f' =  [nin] ++ fire
+  | s  == 'l' =  [nin] ++ lightning
+  | s  == 'w' =  [nin] ++ water
+  | s  == 'e' =  [nin] ++ earth-}
