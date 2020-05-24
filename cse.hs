@@ -27,6 +27,7 @@ main = do
 getOneLine :: [String] -> String
 getOneLine allLines = case allLines of
   []     -> ""
+  [x]    -> x
   (x:_)  -> x
   
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
