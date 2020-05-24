@@ -16,12 +16,17 @@ main = do
   contents <- hGetContents output
   
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
-  let oneLine = getOneLine (lines contents)
-  let words   = convertLineToList (oneLine)
-  let aninja  = createOneNinja(words)
-  --fire ++ [aninja]   IO tipi (IO Ninja) dönmediği için hata veriyor. hem IO tipinde döndürüp hem listeye nasıl ekleriz?
-  print aninja
+  let allLines = lines contents
+  let oneLine  = getOneLine allLines
+  let words    = convertLineToList (oneLine)
+  let aninja   = createOneNinja(words)
+  
+  print $ fire ++ [aninja]
   hClose output
+  
+deneme :: [Ninja] -> Ninja -> [Ninja]
+deneme arr ninja = do
+  arr ++ [ninja]
 
 --Her bir satırı array'e farklı eleman olarak dizilmiş string arrayinden ilk elemanı (ilk satırı) getirir
 getOneLine :: [String] -> String
