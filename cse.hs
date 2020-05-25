@@ -21,18 +21,19 @@ main = do
   --let words     = convertLineToList (oneLine)
   let aninja    = lineToNinja oneLine
   --let aninja    = createOneNinja(words)
-  print $ fire ++ [aninja]
+  print $ addNinjaToList aninja
 
   let a  = tail (tail (tail allLines))
   let b   = getOneLine a
   let c    = lineToNinja b
-  print $ wind ++ [c]
+  print $ addNinjaToList c
 
   let x  = tail (tail (tail a))
   let y   = getOneLine x
   let z    = lineToNinja y
-  print $ water ++ [z]
 
+  print $ addNinjaToList z
+  print z
 
   hClose output
 
@@ -74,7 +75,7 @@ ability2:: String, r:: Int,
 score:: Int}
 
 instance Show Ninja where
-  show (Ninja a b c d e f g h k) = show a ++"country: "++show b++ ", Score: " ++ show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h
+  show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h
 
 
 
