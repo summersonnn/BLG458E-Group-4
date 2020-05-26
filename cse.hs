@@ -16,8 +16,10 @@ main = do
   contents <- hGetContents output
 
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
-  let allLines  = lines contents
-  let oneLine   = getOneLine allLines
+  let allLines      = lines contents
+  listsCombined <- fillLists allLines (fire:lightning:water:earth:[])
+  print listsCombined
+  {-let oneLine   = getOneLine allLines
   let aninja    = lineToNinja oneLine
  
   let a    = tail (tail (tail allLines))
@@ -26,12 +28,21 @@ main = do
 
   let x    = tail (tail (tail a))
   let y    = getOneLine x
-  let z    = lineToNinja y
+  let z    = lineToNinja y-}
 
-  smth <- xfunc [fire]
-  print smth
+  --smth <- xfunc [fire]
+  --print smth
 
   hClose output
+  
+fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
+fillLists allLines x@(fire:lightning:water:earth) = do
+  let oneLine   = getOneLine allLines
+  if oneLine == "" then return x
+  else do
+  let aninja    = lineToNinja oneLine
+  let newx      = addNinjaToList x aninja     --((fire ++ [aninja]):water)
+  fillLists (tail allLines) newx
   
 --Ninja array'lerinden oluşan array alır. Hem IO yapar hem Ninja array'lerinden oluşan array döndürür.
 xfunc :: [[Ninja]] -> IO [[Ninja]]
@@ -45,6 +56,14 @@ xfunc allLists = do
   if userSelection == "e"
   then return allLists
   else xfunc allLists
+  
+addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
+addNinjaToList allLists@(fi:l:w:ea) nin@(Ninja a b c d e f g h k) = case b of
+  'F' -> ((fi ++ [nin]):l:w:ea)
+  'L' -> (fi:(l ++ [nin]):w:ea)
+  'W' -> (fi:l:(w ++ [nin]):ea)
+  'E' -> (fi:l:w:(ea ++ [nin]))
+  _   -> allLists
   
 lineToNinja :: String -> Ninja
 lineToNinja oneLine =
@@ -74,6 +93,7 @@ createOneNinja line = Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line 
 convertLineToList :: String -> [String]
 convertLineToList givenLine =
   splitOn " " (givenLine)
+
 
 
 data Ninja = Ninja {name:: String, country:: Char,
@@ -111,11 +131,3 @@ zeynep allLines@(x:xs) = case allLines of
  [x]     -> fire ++ [lineToNinja x]
  (x:xs)  -> fire ++ getOneLine(xs)-}
 
-
-addNinjaToList :: Ninja -> [Ninja]
-addNinjaToList nin@(Ninja a b c d e f g h k) = case b of
-  'L' -> [nin] ++ lightning
-  'F' -> [nin] ++ fire
-  'W' -> [nin] ++ water
-  'E' -> [nin] ++ earth
-  _   -> []
