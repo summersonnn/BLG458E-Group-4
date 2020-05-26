@@ -18,20 +18,14 @@ main = do
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines  = lines contents
   let oneLine   = getOneLine allLines
-  --let words     = convertLineToList (oneLine)
   let aninja    = lineToNinja oneLine
-  --let aninja    = createOneNinja(words)
-  --print $ addNinjaToList aninja
-  print $ addNinjaToList aninja
-  print fire
-
-  let a  = tail (tail (tail allLines))
-  let b   = getOneLine a
+ 
+  let a    = tail (tail (tail allLines))
+  let b    = getOneLine a
   let c    = lineToNinja b
-  --print $ addNinjaToList c
 
-  let x  = tail (tail (tail a))
-  let y   = getOneLine x
+  let x    = tail (tail (tail a))
+  let y    = getOneLine x
   let z    = lineToNinja y
 
   smth <- xfunc [fire]
@@ -42,13 +36,16 @@ main = do
 --Ninja array'lerinden oluşan array alır. Hem IO yapar hem Ninja array'lerinden oluşan array döndürür.
 xfunc :: [[Ninja]] -> IO [[Ninja]]
 xfunc allLists = do
- userSelection <- getLine
- if userSelection == "e"
+  putStrLn "a) View a Country's Ninja Information"
+  putStrLn "b) View All Countries' Ninja Information"
+  putStrLn "c) Make a Round Between Ninjas"
+  putStrLn "d) Make a Round Between Countries"
+  putStrLn "e) Exit"
+  userSelection <- getLine
+  if userSelection == "e"
   then return allLists
   else xfunc allLists
   
-
-
 lineToNinja :: String -> Ninja
 lineToNinja oneLine =
   let
