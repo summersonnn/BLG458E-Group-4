@@ -21,21 +21,32 @@ main = do
   --let words     = convertLineToList (oneLine)
   let aninja    = lineToNinja oneLine
   --let aninja    = createOneNinja(words)
+  --print $ addNinjaToList aninja
   print $ addNinjaToList aninja
+  print fire
 
   let a  = tail (tail (tail allLines))
   let b   = getOneLine a
   let c    = lineToNinja b
-  print $ addNinjaToList c
+  --print $ addNinjaToList c
 
   let x  = tail (tail (tail a))
   let y   = getOneLine x
   let z    = lineToNinja y
 
-  print $ addNinjaToList z
-  print z
+  smth <- xfunc [fire]
+  print smth
 
   hClose output
+  
+--Ninja array'lerinden oluşan array alır. Hem IO yapar hem Ninja array'lerinden oluşan array döndürür.
+xfunc :: [[Ninja]] -> IO [[Ninja]]
+xfunc allLists = do
+ userSelection <- getLine
+ if userSelection == "e"
+  then return allLists
+  else xfunc allLists
+  
 
 
 lineToNinja :: String -> Ninja
