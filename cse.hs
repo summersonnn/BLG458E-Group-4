@@ -22,7 +22,10 @@ main = do
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
+  print ("Lists are constructed")
   print listsCombined
+
+  xfunc listsCombined
   {-let oneLine   = getOneLine allLines
   let aninja    = lineToNinja oneLine
 
@@ -59,7 +62,14 @@ xfunc allLists = do
   userSelection <- getLine
   if userSelection == "e"
   then return allLists
+  else if userSelection == "b"
+  then do
+    print allLists
+    xfunc allLists
   else xfunc allLists
+
+
+
 
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
 addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
@@ -137,7 +147,22 @@ deneme allLines@(x:xs) = do
   fire ++ [aninja]
   return (xs)-}
 
-  {-zeynep :: [String] -> [Ninja]
-zeynep allLines@(x:xs) = case allLines of
- [x]     -> fire ++ [lineToNinja x]
- (x:xs)  -> fire ++ getOneLine(xs)-}
+
+-- fail zeynep denemeleri
+  {-buffer :: IO [[Ninja]] -> [[Ninja]]
+  buffer allLists =
+    buffer allLists
+
+  getCountry :: [[Ninja]] -> IO [[Ninja]]
+  getCountry allLists = do
+    putStrLn "Enter the country code: "
+    country <- getLine
+    putStrLn (printCountry allLists country)
+    return allLists
+
+  printCountry :: [[Ninja]] -> String -> String
+  printCountry allLists country
+    | country == "f" = "Fire \n"
+  --  | _              = "no country choosen"
+
+  -}
