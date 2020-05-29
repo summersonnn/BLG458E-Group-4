@@ -57,10 +57,13 @@ xfunc allLists = do
   else if userSelection == "b"
   then do
     printAllCountries allLists
+  else if userSelection == "c"
+  then do
+    makeRoundNinjas allLists
   else xfunc allLists
 
 
-{- makeRoundNinjas :: [[Ninja]] -> IO [[Ninja]]
+makeRoundNinjas :: [[Ninja]] -> IO [[Ninja]]
 makeRoundNinjas allLists = do
   putStrLn "Enter the name of the first ninja: "
   firstName <- getLine
@@ -69,11 +72,32 @@ makeRoundNinjas allLists = do
   putStrLn "Enter the name of the second ninja: "
   secondName <- getLine
   putStrLn "Enter the country code of the second ninja: "
-  secondCountry <- getLine -}
+  secondCountry <- getLine
+  let ninja1@(Ninja a b c d e f g h k) = findCountry firstCountry firstName allLists
+  let ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2) = findCountry secondCountry secondName allLists
+
+  print d2
+  return allLists
+
+
+
+findCountry :: String -> String -> [[Ninja]] -> Ninja
+findCountry country name allLists@[fi,l,wi,wa,ea]
+  | country == "F" || country == "f" = findNinja name fi
+  | country == "W" || country == "w" = findNinja name wa
+  | country == "N" || country == "n" = findNinja name wi
+  | country == "E" || country == "e" = findNinja name ea
+  | country == "L" || country == "l" = findNinja name l
+
+findNinja :: String -> [Ninja] -> Ninja
+findNinja name x@(nin@(Ninja a b c d e f g h k):xs)
+  | name == a = nin
+  | name /= a = findNinja name xs
+
 
 
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
-printAllCountries allLists -- @(x:xi)
+printAllCountries allLists
   | length allLists == 0 = return allLists
   | length allLists /= 0 = do
       print (head allLists)
