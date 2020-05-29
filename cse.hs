@@ -1,3 +1,7 @@
+--compile and run
+-- ghc cse.hs -o cse
+-- ./cse csereport.txt
+
 import System.IO
 import System.Environment
 import Data.List
@@ -21,7 +25,7 @@ main = do
   print listsCombined
   {-let oneLine   = getOneLine allLines
   let aninja    = lineToNinja oneLine
- 
+
   let a    = tail (tail (tail allLines))
   let b    = getOneLine a
   let c    = lineToNinja b
@@ -34,7 +38,7 @@ main = do
   --print smth
 
   hClose output
-  
+
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
 fillLists allLines x@[fire,lightning,wind,water,earth] = do
   let oneLine   = getOneLine allLines
@@ -43,7 +47,7 @@ fillLists allLines x@[fire,lightning,wind,water,earth] = do
   let aninja    = lineToNinja oneLine
   let newx      = addNinjaToList x aninja     --((fire ++ [aninja]):water)
   fillLists (tail allLines) newx
-  
+
 --Ninja array'lerinden oluşan array alır. Hem IO yapar hem Ninja array'lerinden oluşan array döndürür.
 xfunc :: [[Ninja]] -> IO [[Ninja]]
 xfunc allLists = do
@@ -56,7 +60,7 @@ xfunc allLists = do
   if userSelection == "e"
   then return allLists
   else xfunc allLists
-  
+
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
 addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
   'F' -> [(fi ++ [nin]),l,wi,wa,ea]
@@ -65,7 +69,7 @@ addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b o
   'W' -> [fi,l,wi,(wa ++ [nin]),ea]
   'E' -> [fi,l,wi,wa,(ea ++ [nin])]
   _   -> allLists
-  
+
 lineToNinja :: String -> Ninja
 lineToNinja oneLine =
   let
@@ -79,7 +83,7 @@ getOneLine allLines = case allLines of
   []     -> ""
   [x]    -> x
   (x:_)  -> x
-  
+
 getOneLineFromEnd :: [String] -> String
 getOneLineFromEnd y@(x:xs) = case y of
   []       -> ""
@@ -88,12 +92,12 @@ getOneLineFromEnd y@(x:xs) = case y of
 
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
-createOneNinja line 
+createOneNinja line
   | (line !! 1) == "Wind"    = Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
   | (line !! 1) /= "Wind"    = Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
-    
-     
-  
+
+
+
 
 
 --tek bir stringi(cümleyi) kelimelerden olusan arraye donusturuyor
@@ -110,7 +114,7 @@ ability2:: String, r:: Int,
 score:: Int}
 
 instance Show Ninja where
-  show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h
+  show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h ++ "\n"
 
 
 
@@ -137,4 +141,3 @@ deneme allLines@(x:xs) = do
 zeynep allLines@(x:xs) = case allLines of
  [x]     -> fire ++ [lineToNinja x]
  (x:xs)  -> fire ++ getOneLine(xs)-}
-
