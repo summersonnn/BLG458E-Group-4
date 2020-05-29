@@ -17,7 +17,7 @@ main = do
 
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
-  listsCombined <- fillLists allLines (fire:lightning:water:earth:[])
+  listsCombined <- fillLists allLines [fire,lightning,water,earth]
   print listsCombined
   {-let oneLine   = getOneLine allLines
   let aninja    = lineToNinja oneLine
@@ -36,7 +36,7 @@ main = do
   hClose output
   
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
-fillLists allLines x@(fire:lightning:water:earth) = do
+fillLists allLines x@[fire,lightning,water,earth] = do
   let oneLine   = getOneLine allLines
   if oneLine == "" then return x
   else do
@@ -58,11 +58,11 @@ xfunc allLists = do
   else xfunc allLists
   
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
-addNinjaToList allLists@(fi:l:w:ea) nin@(Ninja a b c d e f g h k) = case b of
-  'F' -> ((fi ++ [nin]):l:w:ea)
-  'L' -> (fi:(l ++ [nin]):w:ea)
-  'W' -> (fi:l:(w ++ [nin]):ea)
-  'E' -> (fi:l:w:(ea ++ [nin]))
+addNinjaToList allLists@[fi,l,w,ea] nin@(Ninja a b c d e f g h k) = case b of
+  'F' -> [(fi ++ [nin]),l,w,ea]
+  'L' -> [fi,(l ++ [nin]),w,ea]
+  'W' -> [fi,l,(w ++ [nin]),ea]
+  'E' -> [fi,l,w,(ea ++ [nin])]
   _   -> allLists
   
 lineToNinja :: String -> Ninja
