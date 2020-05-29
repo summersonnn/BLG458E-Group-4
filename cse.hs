@@ -26,19 +26,7 @@ main = do
   print listsCombined
 
   xfunc listsCombined
-  {-let oneLine   = getOneLine allLines
-  let aninja    = lineToNinja oneLine
 
-  let a    = tail (tail (tail allLines))
-  let b    = getOneLine a
-  let c    = lineToNinja b
-
-  let x    = tail (tail (tail a))
-  let y    = getOneLine x
-  let z    = lineToNinja y-}
-
-  --smth <- xfunc [fire]
-  --print smth
 
   hClose output
 
@@ -62,13 +50,21 @@ xfunc allLists = do
   userSelection <- getLine
   if userSelection == "e"
   then return allLists
+  else if userSelection == "a"
+  then do
+    getCountry allLists
+    xfunc allLists
   else if userSelection == "b"
   then do
-    print allLists
-    xfunc allLists
+    printAllCountries allLists
   else xfunc allLists
 
-
+printAllCountries :: [[Ninja]] -> IO [[Ninja]]
+printAllCountries allLists -- @(x:xi)
+  | length allLists == 0 = return allLists
+  | length allLists /= 0 = do
+      print (head allLists)
+      printAllCountries (tail allLists) 
 
 
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
@@ -149,20 +145,23 @@ deneme allLines@(x:xs) = do
 
 
 -- fail zeynep denemeleri
-  {-buffer :: IO [[Ninja]] -> [[Ninja]]
-  buffer allLists =
-    buffer allLists
+  --buffer :: IO [[Ninja]] -> [[Ninja]]
+  --buffer allLists =
+    --buffer allLists
 
-  getCountry :: [[Ninja]] -> IO [[Ninja]]
-  getCountry allLists = do
-    putStrLn "Enter the country code: "
-    country <- getLine
-    putStrLn (printCountry allLists country)
-    return allLists
-
-  printCountry :: [[Ninja]] -> String -> String
+getCountry :: [[Ninja]] -> IO [[Ninja]]
+getCountry allLists = do
+  putStrLn "Enter the country code: "
+  country <- getLine
   printCountry allLists country
-    | country == "f" = "Fire \n"
-  --  | _              = "no country choosen"
+  return allLists
 
-  -}
+printCountry :: [[Ninja]] -> String -> IO()
+printCountry allLists@[fi,l,wi,wa,ea] country
+  | country == "F" || country == "f" = print fi
+  | country == "W" || country == "w" = print wa
+  | country == "N" || country == "n" = print wi
+  | country == "E" || country == "e" = print ea
+  | country == "L" || country == "l" = print l
+
+  --  | _              = "no country choosen"
