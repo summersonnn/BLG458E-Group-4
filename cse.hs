@@ -59,12 +59,25 @@ xfunc allLists = do
     printAllCountries allLists
   else xfunc allLists
 
+
+{- makeRoundNinjas :: [[Ninja]] -> IO [[Ninja]]
+makeRoundNinjas allLists = do
+  putStrLn "Enter the name of the first ninja: "
+  firstName <- getLine
+  putStrLn "Enter the country code of the first ninja: "
+  firstCountry <- getLine
+  putStrLn "Enter the name of the second ninja: "
+  secondName <- getLine
+  putStrLn "Enter the country code of the second ninja: "
+  secondCountry <- getLine -}
+
+
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
 printAllCountries allLists -- @(x:xi)
   | length allLists == 0 = return allLists
   | length allLists /= 0 = do
       print (head allLists)
-      printAllCountries (tail allLists) 
+      printAllCountries (tail allLists)
 
 
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
@@ -99,8 +112,8 @@ getOneLineFromEnd y@(x:xs) = case y of
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
 createOneNinja line
-  | (line !! 1) == "Wind"    = Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
-  | (line !! 1) /= "Wind"    = Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
+  | (line !! 1) == "Wind"    = putScore (Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
+  | (line !! 1) /= "Wind"    = putScore (Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 7 0)
 
 
 
@@ -117,7 +130,7 @@ data Ninja = Ninja {name:: String, country:: Char,
 status:: String, exam1:: Float,
 exam2:: Float, ability1:: String,
 ability2:: String, r:: Int,
-score:: Int}
+score:: Float}
 
 instance Show Ninja where
   show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h ++ "\n"
@@ -134,6 +147,29 @@ wind :: [Ninja] -- add the junior ninjas of Land of Wind to that list
 wind = []
 earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
 earth = []
+
+
+putScore :: Ninja -> Ninja
+putScore nin@(Ninja name county stat exam1 exam2 ab1 ab2 r score) =
+  Ninja name county stat exam1 exam2 ab1 ab2 r (0.5*exam1 + 0.3*exam2 + calculateAbility ab1 + calculateAbility ab2 + 10* (fromIntegral r))
+
+
+
+calculateAbility :: String -> Float
+calculateAbility ability
+  | ability == "Clone" = 20
+  | ability == "Hit" = 10
+  | ability == "Lightning" = 50
+  | ability == "Vision" = 30
+  | ability == "Sand" = 50
+  | ability == "Fire" = 40
+  | ability == "Blade" = 20
+  | ability == "Summon" = 50
+  | ability == "Storm" = 10
+  | ability == "Rock" = 20
+  | ability == "Water" = 30
+
+
 
 
 {-deneme :: [String] -> [String]
