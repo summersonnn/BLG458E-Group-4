@@ -17,7 +17,7 @@ main = do
 
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
-  listsCombined <- fillLists allLines [fire,lightning,water,earth]
+  listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
   print listsCombined
   {-let oneLine   = getOneLine allLines
   let aninja    = lineToNinja oneLine
@@ -36,7 +36,7 @@ main = do
   hClose output
   
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
-fillLists allLines x@[fire,lightning,water,earth] = do
+fillLists allLines x@[fire,lightning,wind,water,earth] = do
   let oneLine   = getOneLine allLines
   if oneLine == "" then return x
   else do
@@ -58,11 +58,12 @@ xfunc allLists = do
   else xfunc allLists
   
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
-addNinjaToList allLists@[fi,l,w,ea] nin@(Ninja a b c d e f g h k) = case b of
-  'F' -> [(fi ++ [nin]),l,w,ea]
-  'L' -> [fi,(l ++ [nin]),w,ea]
-  'W' -> [fi,l,(w ++ [nin]),ea]
-  'E' -> [fi,l,w,(ea ++ [nin])]
+addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
+  'F' -> [(fi ++ [nin]),l,wi,wa,ea]
+  'L' -> [fi,(l ++ [nin]),wi,wa,ea]
+  'N' -> [fi,l,(wi ++ [nin]),wa,ea]
+  'W' -> [fi,l,wi,(wa ++ [nin]),ea]
+  'E' -> [fi,l,wi,wa,(ea ++ [nin])]
   _   -> allLists
   
 lineToNinja :: String -> Ninja
@@ -78,7 +79,7 @@ getOneLine allLines = case allLines of
   []     -> ""
   [x]    -> x
   (x:_)  -> x
-
+  
 getOneLineFromEnd :: [String] -> String
 getOneLineFromEnd y@(x:xs) = case y of
   []       -> ""
@@ -87,7 +88,13 @@ getOneLineFromEnd y@(x:xs) = case y of
 
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
-createOneNinja line = Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
+createOneNinja line 
+  | (line !! 1) == "Wind"    = Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
+  | (line !! 1) /= "Wind"    = Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0
+    
+     
+  
+
 
 --tek bir stringi(cümleyi) kelimelerden olusan arraye donusturuyor
 convertLineToList :: String -> [String]
