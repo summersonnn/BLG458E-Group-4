@@ -57,6 +57,7 @@ xfunc allLists = do
   else if userSelection == "b"
   then do
     printAllCountries allLists
+    xfunc allLists
   else if userSelection == "c"
   then do
     makeRoundNinjas allLists
