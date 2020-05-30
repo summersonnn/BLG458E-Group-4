@@ -146,23 +146,13 @@ lineToNinja oneLine =
 getOneLine :: [String] -> String
 getOneLine allLines = case allLines of
   []     -> ""
-  [x]    -> x
   (x:_)  -> x
-
-getOneLineFromEnd :: [String] -> String
-getOneLineFromEnd y@(x:xs) = case y of
-  []       -> ""
-  [x]      -> x
-  (x:xs)   -> getOneLineFromEnd(xs)
 
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
 createOneNinja line
-  | (line !! 1) == "Wind"    = putScore (Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
-  | (line !! 1) /= "Wind"    = putScore (Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 7 0)
-
-
-
+  | (line !! 1) == "Wind"  = putScore (Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
+  | (line !! 1) /= "Wind"  = putScore (Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
 
 
 --tek bir stringi(cümleyi) kelimelerden olusan arraye donusturuyor
@@ -180,8 +170,6 @@ score:: Float}
 
 instance Show Ninja where
   show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h ++ "\n"
-
-
 
 fire :: [Ninja] -- add the junior ninjas of Land of Fire to that list
 fire = []
