@@ -74,25 +74,39 @@ makeRoundNinjas allLists = do
   secondName <- getLine
   putStrLn "Enter the country code of the second ninja: "
   secondCountry <- getLine
-  let ninja1@(Ninja a b c d e f g h k) = findCountry firstCountry firstName allLists
-  let ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2) = findCountry secondCountry secondName allLists
-
-  print d2
+  (allLists, ninja1@(Ninja a b c d e f g h k)) <- findCountry firstCountry firstName allLists
+  (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
+  --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
+  print allLists
   return allLists
 
 
-
-findCountry :: String -> String -> [[Ninja]] -> Ninja
+--Returns the final allLists and the Ninja that is deleted
+findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 findCountry country name allLists@[fi,l,wi,wa,ea]
-  | country == "F" || country == "f" = findNinja name fi
-  | country == "W" || country == "w" = findNinja name wa
-  | country == "N" || country == "n" = findNinja name wi
-  | country == "E" || country == "e" = findNinja name ea
-  | country == "L" || country == "l" = findNinja name l
-
-findNinja :: String -> [Ninja] -> Ninja
+  | country == "F" || country == "f" = do
+  let x = findNinja name fi
+  return ([fst x,l,wi,wa,ea], snd x)
+  
+  | country == "W" || country == "w" = do
+  let x = findNinja name wa
+  return (([fi,l,wi,fst x,ea], snd x))
+  
+  | country == "N" || country == "n" = do
+  let x = findNinja name wi
+  return (([fi,l,fst x,wa,wa], snd x))
+  
+  | country == "E" || country == "e" = do
+  let x = findNinja name ea
+  return (([fi,l,wi,wa,fst x], snd x))
+  
+  | country == "L" || country == "l" = do
+  let x = findNinja name l
+  return (([fi,fst x,wi,wa,ea], snd x))
+  
+findNinja :: String -> [Ninja] -> ([Ninja], Ninja)
 findNinja name x@(nin@(Ninja a b c d e f g h k):xs)
-  | name == a = nin
+  | name == a = (xs,nin)
   | name /= a = findNinja name xs
 
 
