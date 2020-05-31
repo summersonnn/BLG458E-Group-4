@@ -78,10 +78,22 @@ makeRoundNinjas allLists = do
   (allLists, ninja1@(Ninja a b c d e f g h k)) <- findCountry firstCountry firstName allLists
   (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
-  print allLists
-  print ninja1
-  print ninja2
-  return allLists
+  
+  --Compare scores and add the winner ninja to the list with updated values
+  if k > k2 
+    then do
+    let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
+    print newlists
+    return newlists
+    else do
+    let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
+    print newlists
+    return newlists
+   
+  
+  
+  
+  
 
 
 --Returns the final allLists and the Ninja that is deleted
