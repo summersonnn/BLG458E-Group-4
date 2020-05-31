@@ -176,7 +176,7 @@ printAllCountries allLists
       print (head allLists)
       printAllCountries (tail allLists)
 
-
+--Each Ninja's countries checked then added country array list 
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
 addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
   'F' -> [(fi ++ [nin]),l,wi,wa,ea]
@@ -233,7 +233,7 @@ wind = []
 earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
 earth = []
 
-
+-- Ninja's total score is calculated 
 putScore :: Ninja -> Ninja
 putScore nin@(Ninja name county stat exam1 exam2 ab1 ab2 r score) =
   Ninja name county stat exam1 exam2 ab1 ab2 r (0.5*exam1 + 0.3*exam2 + calculateAbility ab1 + calculateAbility ab2 + 10* (fromIntegral r))
@@ -257,18 +257,6 @@ calculateAbility ability
 
 
 
-{-deneme :: [String] -> [String]
-deneme allLines@(x:xs) = do
-  let words = convertLineToList(x)
-  let aninja = createOneNinja(words)
-  fire ++ [aninja]
-  return (xs)-}
-
-
--- fail zeynep denemeleri
-  --buffer :: IO [[Ninja]] -> [[Ninja]]
-  --buffer allLists =
-    --buffer allLists
 
 getCountry :: [[Ninja]] -> IO [[Ninja]]
 getCountry allLists = do
