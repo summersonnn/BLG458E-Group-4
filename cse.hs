@@ -62,6 +62,10 @@ xfunc allLists = do
   then do
     allLists <- makeRoundNinjas allLists
     xfunc allLists
+  else if userSelection == "d"
+  then do
+    allLists <- makeRoundCountries allLists
+    xfunc allLists
   else xfunc allLists
 
 
@@ -89,13 +93,48 @@ makeRoundNinjas allLists = do
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     print newlists
     return newlists
+    
+makeRoundCountries :: [[Ninja]] -> IO [[Ninja]]
+makeRoundCountries allLists = do
+  putStrLn "Enter the first country code: "
+  c1 <- getLine
+  putStrLn "Enter the second country code: "
+  c2 <- getLine
+  (allLists, ninja1@(Ninja a b c d e f g h k)) <- getFirstNinja c1 allLists
+  (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja c2 allLists
+  --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
+  
+  --Compare scores and add the winner ninja to the list with updated values
+  if k > k2 
+    then do
+    let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
+    print "Winner: " 
+    print ninja1
+    --print newlists
+    return newlists
+    else do
+    let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
+    print "Winner: " 
+    print ninja2
+    --print newlists
+    return newlists
+
    
-  
-  
-  
-  
+--Returns the final allLists(after substracting the first ninja from the given country) and deleted Ninja
+getFirstNinja :: String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
+getFirstNinja country allLists@[fi,l,wi,wa,ea]  
+  | country == "F" || country == "f" = do
+  return ([tail fi,l,wi,wa,ea], head fi)
+  | country == "W" || country == "w" = do
+  return ([fi,l,wi,tail wa,ea], head wa)
+  | country == "N" || country == "n" = do
+  return ([fi,l,tail wi,wa,ea], head wi)
+  | country == "E" || country == "e" = do
+  return ([fi,l,wi,wa,tail ea], head ea)
+  | country == "L" || country == "l" = do
+  return ([fi,tail l,wi,wa,ea], head l)
 
-
+   
 --Returns the final allLists and the Ninja that is deleted
 findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 findCountry country name allLists@[fi,l,wi,wa,ea]
