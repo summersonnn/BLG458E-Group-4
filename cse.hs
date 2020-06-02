@@ -88,18 +88,15 @@ makeRoundNinjas allLists = do
   let abilities1 = calculateAbility f + calculateAbility g
   let abilities2 = calculateAbility f2 + calculateAbility g2
   rand <- drawDouble 0.0 1.0
-  print rand
-  putStrLn "Winner: "
+  putStr "Winner: "
   --Compare scores and add the winner ninja to the list with updated values
   if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
-    print newlists 
     print (Ninja a b c d e f g (h+1) (k+10))
     return newlists
     else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
-    print newlists
     print (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     return newlists
 
@@ -117,18 +114,15 @@ makeRoundCountries allLists = do
   let abilities1 = calculateAbility f + calculateAbility g
   let abilities2 = calculateAbility f2 + calculateAbility g2
   rand <- drawDouble 0.0 1.0
-  print rand
-  putStrLn "Winner: "
+  putStr "Winner: "
   --Compare scores and add the winner ninja to the list with updated values
   if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
-    print newlists 
     print (Ninja a b c d e f g (h+1) (k+10))
     return newlists
     else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
-    print newlists
     print (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     return newlists
 
@@ -233,7 +227,7 @@ ability2:: String, r:: Int,
 score:: Float}
 
 instance Show Ninja where
-  show (Ninja a b c d e f g h k) = show a ++ ", Score: " ++  show k ++ ", Status: " ++ show c ++ ", Round: " ++ show h ++ "\n"
+  show (Ninja a b c d e f g h k) = "\"" ++ a ++ ", Score: " ++  show k ++ ", Status: " ++ c ++ ", Round: " ++ show h ++ "\"" ++ "\n"
 
 fire :: [Ninja] -- add the junior ninjas of Land of Fire to that list
 fire = []
