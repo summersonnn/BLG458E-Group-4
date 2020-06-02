@@ -6,6 +6,7 @@ import System.IO
 import System.Environment
 import Data.List
 import Data.List.Split
+import System.Random
 
 
 
@@ -83,17 +84,25 @@ makeRoundNinjas allLists = do
   (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
   
+  
+  let abilities1 = calculateAbility f + calculateAbility g
+  let abilities2 = calculateAbility f2 + calculateAbility g2
+  rand <- drawDouble 0.0 1.0
+  print rand
+  putStrLn "Winner: "
   --Compare scores and add the winner ninja to the list with updated values
-  if k > k2 
+  if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
-    print newlists
+    print newlists 
+    print (Ninja a b c d e f g (h+1) (k+10))
     return newlists
-    else do
+    else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     print newlists
+    print (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     return newlists
-    
+
 makeRoundCountries :: [[Ninja]] -> IO [[Ninja]]
 makeRoundCountries allLists = do
   putStrLn "Enter the first country code: "
@@ -104,19 +113,23 @@ makeRoundCountries allLists = do
   (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja c2 allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
   
+  
+  let abilities1 = calculateAbility f + calculateAbility g
+  let abilities2 = calculateAbility f2 + calculateAbility g2
+  rand <- drawDouble 0.0 1.0
+  print rand
+  putStrLn "Winner: "
   --Compare scores and add the winner ninja to the list with updated values
-  if k > k2 
+  if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newlists = addNinjaToList allLists (Ninja a b c d e f g (h+1) (k+10))
-    print "Winner: " 
-    print ninja1
-    --print newlists
+    print newlists 
+    print (Ninja a b c d e f g (h+1) (k+10))
     return newlists
-    else do
+    else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
-    print "Winner: " 
-    print ninja2
-    --print newlists
+    print newlists
+    print (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     return newlists
 
    
@@ -254,9 +267,8 @@ calculateAbility ability
   | ability == "Rock" = 20
   | ability == "Water" = 30
 
-
-
-
+drawDouble :: Double -> Double  -> IO Double
+drawDouble x y = getStdRandom (randomR (x,y))   
 
 getCountry :: [[Ninja]] -> IO [[Ninja]]
 getCountry allLists = do
