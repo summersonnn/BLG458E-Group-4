@@ -2,6 +2,7 @@
 -- ghc cse.hs -o cse
 -- ./cse csereport.txt
 
+
 import System.IO
 import System.Environment
 import Data.List
@@ -9,6 +10,10 @@ import Data.List.Split
 import System.Random
 import Data.List (intercalate)
 import qualified Data.Text as T
+<<<<<<< HEAD
+=======
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 
 
 
@@ -22,6 +27,7 @@ main = do
   --hGetContents :: Handle -> IO String
   contents <- hGetContents output
 
+
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
@@ -34,6 +40,8 @@ main = do
 
   hClose output
 
+
+
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
 fillLists allLines x@[fire,lightning,wind,water,earth] = do
   let oneLine   = getOneLine allLines
@@ -42,6 +50,7 @@ fillLists allLines x@[fire,lightning,wind,water,earth] = do
   let aninja    = lineToNinja oneLine
   let newx      = addNinjaToList x aninja     --((fire ++ [aninja]):water)
   fillLists (tail allLines) newx
+
 
 --Ninja array'lerinden oluşan array alır. Hem IO yapar hem Ninja array'lerinden oluşan array döndürür.
 xfunc :: [[Ninja]] -> IO [[Ninja]]
@@ -76,6 +85,16 @@ xfunc allLists = do
     xfunc allLists
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 printJourneyman :: [[Ninja]] -> IO[[Ninja]]
 printJourneyman [] = return []
 printJourneyman allLists@(x:xs) = do
@@ -105,6 +124,13 @@ makeRoundNinjas allLists = do
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
   let abilities1 = calculateAbility f + calculateAbility g
   let abilities2 = calculateAbility f2 + calculateAbility g2
   rand <- drawDouble 0.0 1.0
@@ -119,6 +145,9 @@ makeRoundNinjas allLists = do
     let newlists = addNinjaToList allLists (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     print (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
     return newlists
+
+
+
 
 makeRoundCountries :: [[Ninja]] -> IO [[Ninja]]
 makeRoundCountries allLists = do
@@ -137,6 +166,12 @@ makeRoundCountries allLists = do
   putStr ("Winner: ")
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
   --Compare scores and add the winner ninja to the list with updated values
   if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
@@ -151,6 +186,10 @@ makeRoundCountries allLists = do
     return newlists
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 checkJourneyman :: Ninja -> Ninja
 checkJourneyman nin@(Ninja a b s d e f g r k)
   | r==3 = Ninja a b "Journeyman" d e f g r k
@@ -158,6 +197,12 @@ checkJourneyman nin@(Ninja a b s d e f g r k)
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 --Returns the final allLists(after substracting the first ninja from the given country) and deleted Ninja
 getFirstNinja :: String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 getFirstNinja country allLists@[fi,l,wi,wa,ea]
@@ -173,6 +218,12 @@ getFirstNinja country allLists@[fi,l,wi,wa,ea]
   return ([fi,tail l,wi,wa,ea], head l)
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 --Returns the final allLists and the Ninja that is deleted
 findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 findCountry country name allLists@[fi,l,wi,wa,ea]
@@ -188,6 +239,10 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   let x = deleteNinja name wi
   return (([fi,l,fst x,wa,wa], snd x))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
   | country == "E" || country == "e" = do
   let x = deleteNinja name ea
   return (([fi,l,wi,wa,fst x], snd x))
@@ -207,6 +262,9 @@ deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
 
 
 
+
+
+
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
 printAllCountries allLists
   | length allLists == 0 = return allLists
@@ -214,6 +272,11 @@ printAllCountries allLists
       print (head allLists)
       printAllCountries (tail allLists)
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 --Each Ninja's countries checked then added country array list
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
 addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
@@ -224,6 +287,8 @@ addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b o
   'E' -> [fi,l,wi,wa,(ea ++ [nin])]
   _   -> allLists
 
+
+
 lineToNinja :: String -> Ninja
 lineToNinja oneLine =
   let
@@ -231,17 +296,21 @@ lineToNinja oneLine =
      aninja    = createOneNinja(words)
   in (aninja)
 
+
 --Her bir satırı array'e farklı eleman olarak dizilmiş string arrayinden ilk elemanı (ilk satırı) getirir
 getOneLine :: [String] -> String
 getOneLine allLines = case allLines of
   []     -> ""
   (x:_)  -> x
 
+
 --Kelimelerin olduğu arrayi (string arrayi) tek bir ninjaya çevirir
 createOneNinja :: [String] -> Ninja
 createOneNinja line
   | (line !! 1) == "Wind"  = putScore (Ninja (line !! 0) 'N' "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
   | (line !! 1) /= "Wind"  = putScore (Ninja (line !! 0) ((line !! 1) !! 0) "Junior" (read (line !! 2)) (read (line !! 3)) (line !! 4) (line !! 5) 0 0)
+
+
 
 
 --tek bir stringi(cümleyi) kelimelerden olusan arraye donusturuyor
@@ -251,11 +320,17 @@ convertLineToList givenLine =
 
 
 
+
+
+
 data Ninja = Ninja {name:: String, country:: Char,
 status:: String, exam1:: Float,
 exam2:: Float, ability1:: String,
 ability2:: String, r:: Int,
 score:: Float}
+
+
+
 
 instance Show Ninja where
   show (Ninja a b c d e f g h k) = a ++ ", Score: " ++  show k ++ ", Status: " ++ c ++ ", Round: " ++ show h ++ "\n"
@@ -273,10 +348,18 @@ wind = []
 earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
 earth = []
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 -- Ninja's total score is calculated
 putScore :: Ninja -> Ninja
 putScore nin@(Ninja name county stat exam1 exam2 ab1 ab2 r score) =
   Ninja name county stat exam1 exam2 ab1 ab2 r (0.5*exam1 + 0.3*exam2 + calculateAbility ab1 + calculateAbility ab2 + 10* (fromIntegral r))
+
+
+
 
 
 
@@ -296,6 +379,11 @@ calculateAbility ability
 
 drawDouble :: Double -> Double  -> IO Double
 drawDouble x y = getStdRandom (randomR (x,y))
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e2338f1b8f121df3129c00aaebecaafebc5afd5f
 
 getCountry :: [[Ninja]] -> IO [[Ninja]]
 getCountry allLists = do
@@ -303,6 +391,8 @@ getCountry allLists = do
   country <- getLine
   printCountry allLists country
   return allLists
+
+
 
 printCountry :: [[Ninja]] -> String -> IO()
 printCountry allLists@[fi,l,wi,wa,ea] country
