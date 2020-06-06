@@ -11,6 +11,8 @@ import System.Random
 import Data.List (intercalate)
 import qualified Data.Text as T
 
+
+
 main = do
   args <- getArgs
   output <- openFile (head args) ReadMode
