@@ -26,7 +26,7 @@ main = do
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
-  putStr $ unlines $map( unwords . map show ) $ listsCombined
+  printAllCountries listsCombined
 
   xfunc listsCombined
 
@@ -230,9 +230,11 @@ deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
 
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
 printAllCountries allLists
-  | length allLists == 0 = return allLists
+  | length allLists == 0 = do
+      putStrLn ""
+      return allLists
   | length allLists /= 0 = do
-      putStrLn $ (unwords . map show) (head allLists)
+      putStr $ showZ (head allLists)
       printAllCountries (tail allLists)
 
 
@@ -347,12 +349,12 @@ getCountry allLists = do
 
 printCountry :: [[Ninja]] -> String -> IO()
 printCountry allLists@[fi,l,wi,wa,ea] country
-  | country == "F" || country == "f" = putStrLn $ (unwords . map show) fi
-  | country == "W" || country == "w" = putStrLn $ (unwords . map show) wa
-  | country == "N" || country == "n" = putStrLn $ (unwords . map show) wi
-  | country == "E" || country == "e" = putStrLn $ (unwords . map show) ea
-  | country == "L" || country == "l" = putStrLn $ (unwords . map show) l
+  | country == "F" || country == "f" = putStrLn $ showZ fi
+  | country == "W" || country == "w" = putStrLn $ showZ wa
+  | country == "N" || country == "n" = putStrLn $ showZ wi
+  | country == "E" || country == "e" = putStrLn $ showZ ea
+  | country == "L" || country == "l" = putStrLn $ showZ l
   | otherwise = print "Invalid country code"
   
 showZ :: Show a => [a] -> String
-showZ = intercalate " " . map show
+showZ = intercalate "" . map show
