@@ -116,7 +116,11 @@ makeRoundNinjas allLists = do
   (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
-
+  putStrLn a
+  if (a == "Not Found" || a2 == "Not Found")
+    then do putStrLn "Ninja Not Found"
+            return allLists
+    else do
 
   let abilities1 = calculateAbility f + calculateAbility g
   let abilities2 = calculateAbility f2 + calculateAbility g2
@@ -199,34 +203,53 @@ getFirstNinja country allLists@[fi,l,wi,wa,ea]
 findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 findCountry country name allLists@[fi,l,wi,wa,ea]
   | country == "F" || country == "f" = do
-  let x = deleteNinja name fi
-  return ([fst x,l,wi,wa,ea], snd x)
+  x <- deleteNinja name fi
+  if length (fst x) == length fi
+    then do print "Not Found" 
+            return(allLists, snd x)
+    else return ([fst x,l,wi,wa,ea], snd x)
 
   | country == "W" || country == "w" = do
-  let x = deleteNinja name wa
-  return (([fi,l,wi,fst x,ea], snd x))
-
+  x <- deleteNinja name wa
+  if length (fst x) == length wa
+    then do print "Not Found" 
+            return(allLists, snd x)
+    else return (([fi,l,wi,fst x,ea], snd x))
+  
   | country == "N" || country == "n" = do
-  let x = deleteNinja name wi
-  return (([fi,l,fst x,wa,wa], snd x))
+  x <- deleteNinja name wi
+  if length (fst x) == length wi
+    then do print "Not Found" 
+            return(allLists, snd x)
+    else return (([fi,l,fst x,wa,ea], snd x))
 
   | country == "E" || country == "e" = do
-  let x = deleteNinja name ea
-  return (([fi,l,wi,wa,fst x], snd x))
-
+  x <- deleteNinja name ea
+  if length (fst x) == length ea
+    then do print "Not Found" 
+            return(allLists, snd x)
+    else return (([fi,l,wi,wa,fst x], snd x))
+  
   | country == "L" || country == "l" = do
-  let x = deleteNinja name l
-  return (([fi,fst x,wi,wa,ea], snd x))
+  x <- deleteNinja name l
+  if length (fst x) == length l
+    then do print "Not Found" 
+            return(allLists, snd x)
+    else return (([fi,fst x,wi,wa,ea], snd x))
+  
+  
 
 --Finds and deletes the ninja in the ninja list and returns the new list and deleted ninja
 --First case:  Just get the tail of the list and deleted ninja
 --Second case: Append the unmatched ninja to the beginning, and call itself by giving the tail of the ninja list as parameter
 --Side Note:   In second case, there are two exact same calls. This is because of getting first and second element of tuple. Can we make it in a one call?
-deleteNinja :: String -> [Ninja] -> ([Ninja], Ninja)
+deleteNinja :: String -> [Ninja] -> IO ([Ninja], Ninja)
 deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
-  | name == a = (xs,nin)
-  | name /= a = (nin:(fst $ deleteNinja name xs), (snd $ deleteNinja name xs))
-
+  | length x == 0 = return(x, Ninja "Not Found" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  | name == a     = return(xs,nin)
+  | name /= a     = do
+                    res <- deleteNinja name xs
+                    return (nin:(fst $ res ), (snd $ res))
 
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
 printAllCountries allLists
