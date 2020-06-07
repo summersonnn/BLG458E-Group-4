@@ -112,13 +112,12 @@ makeRoundNinjas allLists = do
   secondName <- getLine
   putStrLn "Enter the country code of the second ninja: "
   secondCountry <- getLine
-  (allLists, ninja1@(Ninja a b c d e f g h k)) <- findCountry firstCountry firstName allLists
-  (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
+  (newLists, ninja1@(Ninja a b c d e f g h k)) <- findCountry firstCountry firstName allLists
+  (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
-  putStrLn a
   if (a == "Not Found" || a2 == "Not Found")
-    then do putStrLn "Ninja Not Found"
+    then do putStrLn "Ninja Not Found. Please make sure you type the name of the Ninja correctly.\n"
             return allLists
     else do
 
@@ -130,12 +129,12 @@ makeRoundNinjas allLists = do
   if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newNinja = checkJourneyman(Ninja a b c d e f g (h+1) (k+10))
-    let newlists = addNinjaToList allLists newNinja
+    let newlists = addNinjaToList newLists newNinja
     print newNinja
     return newlists
     else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newNinja = checkJourneyman(Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
-    let newlists = addNinjaToList allLists newNinja
+    let newlists = addNinjaToList newLists newNinja
     print newNinja
     return newlists
 
@@ -205,36 +204,31 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   | country == "F" || country == "f" = do
   x <- deleteNinja name fi
   if length (fst x) == length fi
-    then do print "Not Found" 
-            return(allLists, snd x)
+    then do return(allLists, snd x)
     else return ([fst x,l,wi,wa,ea], snd x)
 
   | country == "W" || country == "w" = do
   x <- deleteNinja name wa
   if length (fst x) == length wa
-    then do print "Not Found" 
-            return(allLists, snd x)
+    then do return(allLists, snd x)
     else return (([fi,l,wi,fst x,ea], snd x))
   
   | country == "N" || country == "n" = do
   x <- deleteNinja name wi
   if length (fst x) == length wi
-    then do print "Not Found" 
-            return(allLists, snd x)
+    then do return(allLists, snd x)
     else return (([fi,l,fst x,wa,ea], snd x))
 
   | country == "E" || country == "e" = do
   x <- deleteNinja name ea
   if length (fst x) == length ea
-    then do print "Not Found" 
-            return(allLists, snd x)
+    then do return(allLists, snd x)
     else return (([fi,l,wi,wa,fst x], snd x))
   
   | country == "L" || country == "l" = do
   x <- deleteNinja name l
   if length (fst x) == length l
-    then do print "Not Found" 
-            return(allLists, snd x)
+    then do return(allLists, snd x)
     else return (([fi,fst x,wi,wa,ea], snd x))
   
   
@@ -245,9 +239,11 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
 --Side Note:   In second case, there are two exact same calls. This is because of getting first and second element of tuple. Can we make it in a one call?
 deleteNinja :: String -> [Ninja] -> IO ([Ninja], Ninja)
 deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
-  | length x == 0 = return(x, Ninja "Not Found" 'f' "" 0.0 0.0 "" "" 0 0.0)
   | name == a     = return(xs,nin)
   | name /= a     = do
+                    if length xs == 0
+                      then return(x, Ninja "Not Found" 'f' "" 0.0 0.0 "" "" 0 0.0)
+                    else do
                     res <- deleteNinja name xs
                     return (nin:(fst $ res ), (snd $ res))
 
