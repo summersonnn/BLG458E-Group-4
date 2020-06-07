@@ -12,7 +12,6 @@ import Data.List (intercalate)
 import qualified Data.Text as T
 
 
-
 main = do
   args <- getArgs
   output <- openFile (head args) ReadMode
@@ -27,8 +26,6 @@ main = do
   --lines :: String -> [String] (creates an array of string from the original one, new line characters serving as separators)
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
-  print ("Lists are constructed")
-  print listsCombined
   putStr $ unlines $map( unwords . map show ) $ listsCombined
 
   xfunc listsCombined
@@ -83,7 +80,6 @@ xfunc allLists = do
 
 countryJourneymans :: [[Ninja]] -> IO [[Ninja]]
 countryJourneymans allLists@(x:xs)
-  | length allLists == 0 = return [[]]
   | length xs == 0 = do
     printJourneyman x
     return [[]]
@@ -232,15 +228,11 @@ deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
   | name /= a = (nin:(fst $ deleteNinja name xs), (snd $ deleteNinja name xs))
 
 
-
-
-
-
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
 printAllCountries allLists
   | length allLists == 0 = return allLists
   | length allLists /= 0 = do
-      print (head allLists)
+      putStrLn $ (unwords . map show) (head allLists)
       printAllCountries (tail allLists)
 
 
@@ -355,9 +347,12 @@ getCountry allLists = do
 
 printCountry :: [[Ninja]] -> String -> IO()
 printCountry allLists@[fi,l,wi,wa,ea] country
-  | country == "F" || country == "f" = print fi
-  | country == "W" || country == "w" = print wa
-  | country == "N" || country == "n" = print wi
-  | country == "E" || country == "e" = print ea
-  | country == "L" || country == "l" = print l
+  | country == "F" || country == "f" = putStrLn $ (unwords . map show) fi
+  | country == "W" || country == "w" = putStrLn $ (unwords . map show) wa
+  | country == "N" || country == "n" = putStrLn $ (unwords . map show) wi
+  | country == "E" || country == "e" = putStrLn $ (unwords . map show) ea
+  | country == "L" || country == "l" = putStrLn $ (unwords . map show) l
   | otherwise = print "Invalid country code"
+  
+showZ :: Show a => [a] -> String
+showZ = intercalate " " . map show
