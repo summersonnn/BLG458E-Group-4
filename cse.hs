@@ -64,8 +64,8 @@ xfunc allLists = do
     return allLists
   else if userSelection == "a"
   then do
-    newLists <- getCountry allLists
-    xfunc newLists
+    getCountry allLists
+    xfunc allLists
   else if userSelection == "b"
   then do
     printAllCountries allLists
