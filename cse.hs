@@ -113,7 +113,7 @@ makeRoundNinjas allLists = do
   putStrLn "Enter the country code of the second ninja: "
   secondCountry <- getLine
   (newLists, ninja1@(Ninja a b c d e f g h k)) <- findCountry firstCountry firstName allLists
-  (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
+  (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName newLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
   if (a == "No Ninja" || a2 == "No Ninja")
@@ -150,8 +150,8 @@ makeRoundCountries allLists = do
   c1 <- getLine
   putStrLn "Enter the second country code: "
   c2 <- getLine
-  (allLists, ninja1@(Ninja a b c d e f g h k)) <- getFirstNinja c1 allLists
-  (allLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja c2 allLists
+  (newLists, ninja1@(Ninja a b c d e f g h k)) <- getFirstNinja c1 allLists
+  (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja c2 newLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
 
@@ -160,18 +160,16 @@ makeRoundCountries allLists = do
   rand <- drawDouble 0.0 1.0
   putStr ("Winner: ")
 
-
-
   --Compare scores and add the winner ninja to the list with updated values
   if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
     then do
     let newNinja = checkJourneyman (Ninja a b c d e f g (h+1) (k+10))
-    let newlists = addNinjaToList allLists newNinja
+    let newlists = addNinjaToList newLists newNinja
     print ( newNinja )
     return newlists
     else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
     let newNinja = checkJourneyman (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
-    let newlists = addNinjaToList allLists newNinja
+    let newlists = addNinjaToList newLists newNinja
     print (newNinja)
     return newlists
 
