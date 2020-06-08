@@ -116,8 +116,11 @@ makeRoundNinjas allLists = do
   (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- findCountry secondCountry secondName allLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
-  if (a == "Not Found" || a2 == "Not Found")
-    then do putStrLn "Ninja Not Found. Please make sure you type the name of the Ninja correctly.\n"
+  if (a == "No Ninja" || a2 == "No Ninja")
+    then do putStrLn "No such Ninja. Please make sure you type the name of the Ninja correctly.\n"
+            return allLists
+    else if (a == "No Country" || a2 == "No Country")
+    then do putStrLn "No such Country. Please make sure you type the name of the country correctly.\n"
             return allLists
     else do
 
@@ -230,6 +233,8 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   if length (fst x) == length l
     then do return(allLists, snd x)
     else return (([fi,fst x,wi,wa,ea], snd x))
+    
+  | otherwise = return (([fi,l,wi,wa,ea], Ninja "No Country" 'f' "" 0.0 0.0 "" "" 0 0.0))
   
   
 
@@ -242,7 +247,7 @@ deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
   | name == a     = return(xs,nin)
   | name /= a     = do
                     if length xs == 0
-                      then return(x, Ninja "Not Found" 'f' "" 0.0 0.0 "" "" 0 0.0)
+                      then return(x, Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
                     else do
                     res <- deleteNinja name xs
                     return (nin:(fst $ res ), (snd $ res))
