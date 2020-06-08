@@ -9,7 +9,9 @@ import Data.List
 import Data.List.Split
 import System.Random
 import Data.List (intercalate)
+import Data.List (sortBy)
 import qualified Data.Text as T
+import Data.Ord (comparing)
 
 
 main = do
@@ -27,13 +29,15 @@ main = do
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
   printAllCountries listsCombined
+  print (sortNinjas (chooseCountry listsCombined))
 
   xfunc listsCombined
 
 
   hClose output
 
-
+chooseCountry :: [[Ninja]] -> [Ninja]
+chooseCountry  allLists@ [fire,lightning,wind,water,earth] = fire
 
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
 fillLists allLines x@[fire,lightning,wind,water,earth] = do
@@ -77,6 +81,14 @@ xfunc allLists = do
   else do
     xfunc allLists
 
+
+sortNinjas :: [Ninja] -> [Ninja]
+sortNinjas countryList = sortBy sortby_score_and_round countryList
+
+sortby_score_and_round nin1@(Ninja a b s d e f g round1 score1) nin2@(Ninja a2 b2 s2 d2 e2 f2 g2 round2 score2)
+  | round1 > round2 = GT
+  | round1 < round2 = LT
+  | round1 == round2 = compare score2 score1
 
 countryJourneymans :: [[Ninja]] -> IO [[Ninja]]
 countryJourneymans allLists@(x:xs)
@@ -213,7 +225,7 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   if length (fst x) == length wa
     then do return(allLists, snd x)
     else return (([fi,l,wi,fst x,ea], snd x))
-  
+
   | country == "N" || country == "n" = do
   x <- deleteNinja name wi
   if length (fst x) == length wi
@@ -225,16 +237,16 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   if length (fst x) == length ea
     then do return(allLists, snd x)
     else return (([fi,l,wi,wa,fst x], snd x))
-  
+
   | country == "L" || country == "l" = do
   x <- deleteNinja name l
   if length (fst x) == length l
     then do return(allLists, snd x)
     else return (([fi,fst x,wi,wa,ea], snd x))
-    
+
   | otherwise = return (([fi,l,wi,wa,ea], Ninja "No Country" 'f' "" 0.0 0.0 "" "" 0 0.0))
-  
-  
+
+
 
 --Finds and deletes the ninja in the ninja list and returns the new list and deleted ninja
 --First case:  Just get the tail of the list and deleted ninja
@@ -363,20 +375,32 @@ drawDouble x y = getStdRandom (randomR (x,y))
 getCountry :: [[Ninja]] -> IO [[Ninja]]
 getCountry allLists = do
   putStrLn "Enter the country code: "
-  country <- getLine
-  printCountry allLists country
+  countryCode <- getLine
+  printCountry allLists countryCode
   return allLists
 
 
 
-printCountry :: [[Ninja]] -> String -> IO()
+printCountry :: [[Ninja]] -> String -> IO [Ninja]
 printCountry allLists@[fi,l,wi,wa,ea] country
-  | country == "F" || country == "f" = putStrLn $ showZ fi
-  | country == "W" || country == "w" = putStrLn $ showZ wa
-  | country == "N" || country == "n" = putStrLn $ showZ wi
-  | country == "E" || country == "e" = putStrLn $ showZ ea
-  | country == "L" || country == "l" = putStrLn $ showZ l
-  | otherwise = print "Invalid country code"
-  
+  | country == "F" || country == "f" = do
+    putStrLn $ showZ (sortNinjas fi)
+    return fi
+  | country == "W" || country == "w" = do
+    putStrLn $ showZ (sortNinjas wa)
+    return wa
+  | country == "N" || country == "n" = do
+    putStrLn $ showZ (sortNinjas wi)
+    return wi
+  | country == "E" || country == "e" = do
+    putStrLn $ showZ (sortNinjas ea)
+    return ea
+  | country == "L" || country == "l" = do
+    putStrLn $ showZ (sortNinjas l)
+    return l
+  | otherwise = do
+    print "Invalid country code"
+    return []
+
 showZ :: Show a => [a] -> String
 showZ = intercalate "" . map show
