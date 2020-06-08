@@ -29,15 +29,12 @@ main = do
   let allLines      = lines contents
   listsCombined <- fillLists allLines [fire,lightning,wind,water,earth]
   printAllCountries listsCombined
-  print (sortNinjas (chooseCountry listsCombined))
 
   xfunc listsCombined
 
 
   hClose output
 
-chooseCountry :: [[Ninja]] -> [Ninja]
-chooseCountry  allLists@ [fire,lightning,wind,water,earth] = fire
 
 fillLists :: [String] -> [[Ninja]] -> IO [[Ninja]]
 fillLists allLines x@[fire,lightning,wind,water,earth] = do
