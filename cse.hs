@@ -80,10 +80,10 @@ xfunc allLists = do
     xfunc allLists
   else do
     xfunc allLists
-    
-    
-    
-    
+
+
+
+
 -------------------------------------------------------Functions in Part A----------------------------------------------------------------------
 getCountry :: [[Ninja]] -> IO [[Ninja]]
 getCountry allLists = do
@@ -91,8 +91,8 @@ getCountry allLists = do
   countryCode <- getLine
   printCountry allLists countryCode
   return allLists
-  
-  
+
+
 printCountry :: [[Ninja]] -> String -> IO ()
 printCountry allLists@[fi,l,wi,wa,ea] country
   | country == "F" || country == "f" = do
@@ -107,21 +107,27 @@ printCountry allLists@[fi,l,wi,wa,ea] country
     putStrLn $ showZ l
   | otherwise = do
     print "Invalid country code"
-    
-    
-  
-sortNinjas :: [Ninja] -> [Ninja]
-sortNinjas countryList = sortBy sortby_score_and_round countryList
 
 
 
-sortby_score_and_round nin1@(Ninja a b s d e f g round1 score1) nin2@(Ninja a2 b2 s2 d2 e2 f2 g2 round2 score2)
-  | round1 > round2 = GT
-  | round1 < round2 = LT
-  | round1 == round2 = compare score2 score1
-  
-  
-  
+sortbyRS nin1@(Ninja a b s d e f g round1 score1) nin2@(Ninja a2 b2 s2 d2 e2 f2 g2 round2 score2)
+  | round1 > round2 = False
+  | round1 < round2 = True
+  | round1 == round2 = (score2 < score1)
+
+
+ins :: (a -> a -> Bool) -> a -> [a] -> [a]
+ins p n [] = [n]
+ins p n xs@(xu:xsu)
+  | p n xu = n : xs
+  | otherwise = xu : ins p n xsu
+
+iSort :: (a -> a -> Bool) -> [a] -> [a]
+iSort p [] = []
+iSort p (x:xs) = ins p x (iSort p xs)
+
+
+
 
 --------------------------------------------------------Functions in Part B--------------------------------------------------------------------
 printAllCountries :: [[Ninja]] -> IO [[Ninja]]
@@ -132,8 +138,8 @@ printAllCountries allLists
   | length allLists /= 0 = do
       putStr $ showZ (head allLists)
       printAllCountries (tail allLists)
-      
-      
+
+
 
 showZ :: Show a => [a] -> String
 showZ = intercalate "" . map show
@@ -164,13 +170,13 @@ makeRoundNinjas allLists = do
     else do
       let array1 = giveMeCorrectList firstCountry allLists
       let array2 = giveMeCorrectList secondCountry allLists
-    
+
       (_,canFight1) <- printJourneyman array1 False
       (_,canFight2) <- printJourneyman array2 False
       if (canFight1 == True)
         then do putStrLn (charToCountry b ++ " country cannot be included in a fight\n")
                 return allLists
-      else if (canFight2 == True) 
+      else if (canFight2 == True)
         then do putStrLn (charToCountry b2 ++ " country cannot be included in a fight\n")
                 return allLists
       else do
@@ -190,9 +196,9 @@ makeRoundNinjas allLists = do
         let newlists = addNinjaToList newLists newNinja
         print newNinja
         return newlists
-        
-        
-        
+
+
+
 --Returns the final allLists and the Ninja that is deleted
 findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 findCountry country name allLists@[fi,l,wi,wa,ea]
@@ -207,7 +213,7 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   if length (fst x) == length wa
     then do return(allLists, snd x)
     else return (([fi,l,wi,fst x,ea], snd x))
-  
+
   | country == "N" || country == "n" = do
   x <- deleteNinja name wi
   if length (fst x) == length wi
@@ -219,16 +225,16 @@ findCountry country name allLists@[fi,l,wi,wa,ea]
   if length (fst x) == length ea
     then do return(allLists, snd x)
     else return (([fi,l,wi,wa,fst x], snd x))
-  
+
   | country == "L" || country == "l" = do
   x <- deleteNinja name l
   if length (fst x) == length l
     then do return(allLists, snd x)
     else return (([fi,fst x,wi,wa,ea], snd x))
-    
+
   | otherwise = return (([fi,l,wi,wa,ea], Ninja "No Country" 'f' "" 0.0 0.0 "" "" 0 0.0))
-  
-  
+
+
 deleteNinja :: String -> [Ninja] -> IO ([Ninja], Ninja)
 deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
   | name == a     = return(xs,nin)
@@ -238,17 +244,17 @@ deleteNinja name x@(nin@(Ninja a b c d e f g h k):xs)
                     else do
                     res <- deleteNinja name xs
                     return (nin:(fst $ res ), (snd $ res))
-                    
+
 
 giveMeCorrectList :: String -> [[Ninja]] -> [Ninja]
-giveMeCorrectList country allLists@[fi,l,wi,wa,ea] 
+giveMeCorrectList country allLists@[fi,l,wi,wa,ea]
   | country == "F" || country == "f" = fi
   | country == "L" || country == "l" = l
   | country == "N" || country == "n" = wi
   | country == "W" || country == "w" = wa
   | country == "E" || country == "e" = ea
-  
-  
+
+
 printJourneyman ::  [Ninja] -> Bool -> IO ([Ninja],Bool)
 printJourneyman [] _ = return ([], False)
 printJourneyman countryList@(x:xs) isForExit = do
@@ -261,29 +267,29 @@ printJourneyman countryList@(x:xs) isForExit = do
     return (countryList,True)
   else do
   printJourneyman xs False
-  
-  
- 
+
+
+
 checkJourneyman :: Ninja -> Ninja
 checkJourneyman nin@(Ninja a b s d e f g r k)
   | r==3  = Ninja a b "Journeyman" d e f g r k
   | r /=3 = nin
-  
-  
+
+
 --Each Ninja's countries checked then added country array list
 addNinjaToList :: [[Ninja]] -> Ninja -> [[Ninja]]
 addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b of
-  'F' -> [sortNinjas (fi ++ [nin]),l,wi,wa,ea]
-  'L' -> [fi,sortNinjas(l ++ [nin]),wi,wa,ea]
-  'N' -> [fi,l,sortNinjas(wi ++ [nin]),wa,ea]
-  'W' -> [fi,l,wi,sortNinjas(wa ++ [nin]),ea]
-  'E' -> [fi,l,wi,wa,sortNinjas(ea ++ [nin])]
+  'F' -> [iSort sortbyRS (fi ++ [nin]),l,wi,wa,ea]
+  'L' -> [fi,iSort sortbyRS (l ++ [nin]),wi,wa,ea]
+  'N' -> [fi,l,iSort sortbyRS (wi ++ [nin]),wa,ea]
+  'W' -> [fi,l,wi,iSort sortbyRS (wa ++ [nin]),ea]
+  'E' -> [fi,l,wi,wa,iSort sortbyRS (ea ++ [nin])]
   _   -> allLists
-  
-  
-  
-  
-  
+
+
+
+
+
 ---------------------------------------------------------Functions in Part D--------------------------------------------------------------------
 
 
@@ -297,16 +303,16 @@ makeRoundCountries allLists = do
   (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja country2 newLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
-  
+
   let array1 = giveMeCorrectList country1 allLists
   let array2 = giveMeCorrectList country2 allLists
-    
+
   (_,canFight1) <- printJourneyman array1 False
   (_,canFight2) <- printJourneyman array2 False
   if (canFight1 == True)
     then do putStrLn (charToCountry b ++ " country cannot be included in a fight\n")
             return allLists
-  else if (canFight2 == True) 
+  else if (canFight2 == True)
     then do putStrLn (charToCountry b2 ++ " country cannot be included in a fight\n")
             return allLists
   else do
@@ -346,11 +352,11 @@ getFirstNinja country allLists@[fi,l,wi,wa,ea]
   return ([fi,l,wi,wa,tail ea], head ea)
   | country == "L" || country == "l" = do
   return ([fi,tail l,wi,wa,ea], head l)
-  
-  
-  
-  
-  
+
+
+
+
+
 ---------------------------------------------------------Functions in Part E--------------------------------------------------------------------
 
 
@@ -363,11 +369,11 @@ countryJourneymans allLists@(x:xs)
     printJourneyman x True
     countryJourneymans xs
     return allLists
-    
-    
-    
-    
-    
+
+
+
+
+
 
 -------------------------------------------------------SMALL FUNCTIONS----------------------------------------------------
 -- Ninja's total score is calculated
@@ -465,25 +471,3 @@ wind :: [Ninja] -- add the junior ninjas of Land of Wind to that list
 wind = []
 earth :: [Ninja] -- add the junior ninjas of Land of Earth to that list
 earth = []
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
