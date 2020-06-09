@@ -307,7 +307,7 @@ printJourneyman countryList@(x:xs) isForExit = do
       else do return ()
     return (countryList,True)
   else do
-  printJourneyman xs False
+  printJourneyman xs isForExit
 
 
 --if the round number is equal to 3 function changes the status to "Journeyman" and returns the ninja
