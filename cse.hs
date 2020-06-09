@@ -7,7 +7,6 @@ import System.IO
 import System.Environment
 import Data.List
 import Data.List.Split
-import System.Random
 import Data.List (intercalate)
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -177,16 +176,15 @@ makeRoundNinjas allLists = do
       else do
         let abilities1 = calculateAbility f + calculateAbility g
         let abilities2 = calculateAbility f2 + calculateAbility g2
-        rand <- drawDouble 0.0 1.0
         putStr "Winner: "
         --Compare scores and add the winner ninja to the list with updated values
-        if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
+        if k > k2 || (k == k2 && abilities1 > abilities2)
         then do
         let newNinja = checkJourneyman(Ninja a b c d e f g (h+1) (k+10))
         let newlists = addNinjaToList newLists newNinja
         print newNinja
         return newlists
-        else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
+        else do--if k < k2 || (k == k2 && abilities2 > abilities1)
         let newNinja = checkJourneyman(Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
         let newlists = addNinjaToList newLists newNinja
         print newNinja
@@ -313,19 +311,18 @@ makeRoundCountries allLists = do
   else do
     let abilities1 = calculateAbility f + calculateAbility g
     let abilities2 = calculateAbility f2 + calculateAbility g2
-    rand <- drawDouble 0.0 1.0
     putStr ("Winner: ")
 
 
 
     --Compare scores and add the winner ninja to the list with updated values
-    if k > k2 || (k == k2 && abilities1 > abilities2) || (k == k2 && abilities1 == abilities2 && rand > 0.5)
+    if k > k2 || (k == k2 && abilities1 > abilities2)
       then do
       let newNinja = checkJourneyman (Ninja a b c d e f g (h+1) (k+10))
       let newlists = addNinjaToList newLists newNinja
       print ( newNinja )
       return newlists
-      else do--if k < k2 || (k == k2 && abilities2 > abilities1) || (k == k2 && abilities1 == abilities2 && rand <= 2)
+      else do--if k < k2 || (k == k2 && abilities2 > abilities1)
       let newNinja = checkJourneyman (Ninja a2 b2 c2 d2 e2 f2 g2 (h2+1) (k2+10))
       let newlists = addNinjaToList newLists newNinja
       print (newNinja)
@@ -375,13 +372,6 @@ countryJourneymans allLists@(x:xs)
 putScore :: Ninja -> Ninja
 putScore nin@(Ninja name county stat exam1 exam2 ab1 ab2 r score) =
   Ninja name county stat exam1 exam2 ab1 ab2 r (0.5*exam1 + 0.3*exam2 + calculateAbility ab1 + calculateAbility ab2 + 10* (fromIntegral r))
-
-
-
-drawDouble :: Double -> Double  -> IO Double
-drawDouble x y = getStdRandom (randomR (x,y))
-
-
 
 
 instance Show Ninja where
