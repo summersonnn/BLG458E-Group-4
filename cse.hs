@@ -144,8 +144,6 @@ printAllCountries allLists
 showZ :: Show a => [a] -> String
 showZ = intercalate "" . map show
 
-
-
 ---------------------------------------------------------Functions in Part C--------------------------------------------------------------------
 makeRoundNinjas :: [[Ninja]] -> IO [[Ninja]]
 makeRoundNinjas allLists = do
@@ -168,11 +166,8 @@ makeRoundNinjas allLists = do
     then do putStrLn "No such Country. Please make sure you type the name of the country correctly.\n"
             return allLists
     else do
-      let array1 = giveMeCorrectList firstCountry allLists
-      let array2 = giveMeCorrectList secondCountry allLists
-
-      (_,canFight1) <- printJourneyman array1 False
-      (_,canFight2) <- printJourneyman array2 False
+      (_,canFight1) <- (printJourneyman .... giveMeCorrectList) firstCountry allLists False
+      (_,canFight2) <- (printJourneyman .... giveMeCorrectList) secondCountry allLists False
       if (canFight1 == True)
         then do putStrLn (charToCountry b ++ " country cannot be included in a fight\n")
                 return allLists
@@ -197,7 +192,11 @@ makeRoundNinjas allLists = do
         print newNinja
         return newlists
 
-
+--Function composition.
+--Function g takes two parameters x and y, outputs single value.
+--Function f takes the output of the function g and another q as parameter
+(....) :: (z -> q -> c) -> (a -> b -> z) -> a -> b -> q -> c
+(....) f g x y q = f (g x y) q
 
 --Returns the final allLists and the Ninja that is deleted
 findCountry :: String -> String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
@@ -303,12 +302,8 @@ makeRoundCountries allLists = do
   (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja country2 newLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
-
-  let array1 = giveMeCorrectList country1 allLists
-  let array2 = giveMeCorrectList country2 allLists
-
-  (_,canFight1) <- printJourneyman array1 False
-  (_,canFight2) <- printJourneyman array2 False
+  (_,canFight1) <- (printJourneyman .... giveMeCorrectList) country1 allLists False
+  (_,canFight2) <- (printJourneyman .... giveMeCorrectList) country2 allLists False
   if (canFight1 == True)
     then do putStrLn (charToCountry b ++ " country cannot be included in a fight\n")
             return allLists
