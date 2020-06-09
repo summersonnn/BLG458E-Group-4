@@ -282,10 +282,7 @@ addNinjaToList allLists@[fi,l,wi,wa,ea] nin@(Ninja a b c d e f g h k) = case b o
   'W' -> [fi,l,wi,iSort sortbyRS (wa ++ [nin]),ea]
   'E' -> [fi,l,wi,wa,iSort sortbyRS (ea ++ [nin])]
   _   -> allLists
-
-
-
-
+  
 
 ---------------------------------------------------------Functions in Part D--------------------------------------------------------------------
 
@@ -300,6 +297,13 @@ makeRoundCountries allLists = do
   (newLists, ninja2@(Ninja a2 b2 c2 d2 e2 f2 g2 h2 k2)) <- getFirstNinja country2 newLists
   --Both ninjas have been deleted. After the comparison, winner ninja will be added again.
 
+  if (a == "No Ninja" || a2 == "No Ninja")
+    then do putStrLn "No such Ninja. Please make sure the country has a ninja.\n"
+            return allLists
+  else if (a == "No Country" || a2 == "No Country")
+    then do putStrLn "No such Country. Please make sure you type the name of the country correctly.\n"
+            return allLists
+  else do
   (_,canFight1) <- (printJourneyman .... giveMeCorrectList) country1 allLists False
   (_,canFight2) <- (printJourneyman .... giveMeCorrectList) country2 allLists False
   if (canFight1 == True)
@@ -335,19 +339,33 @@ makeRoundCountries allLists = do
 getFirstNinja :: String -> [[Ninja]] -> IO ([[Ninja]], Ninja)
 getFirstNinja country allLists@[fi,l,wi,wa,ea]
   | country == "F" || country == "f" = do
-  return ([tail fi,l,wi,wa,ea], head fi)
+  if length fi > 0 
+    then do return ([tail fi,l,wi,wa,ea], head fi)
+  else do return ([tail fi,l,wi,wa,ea], Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  
   | country == "W" || country == "w" = do
-  return ([fi,l,wi,tail wa,ea], head wa)
+  if length wa > 0
+    then do return ([fi,l,wi,tail wa,ea], head wa)
+  else do return ([fi,l,wi,tail wa,ea], Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  
   | country == "N" || country == "n" = do
-  return ([fi,l,tail wi,wa,ea], head wi)
+  if length wi > 0
+    then do return ([fi,l,tail wi,wa,ea], head wi)
+  else do return ([fi,l,tail wi,wa,ea], Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  
   | country == "E" || country == "e" = do
-  return ([fi,l,wi,wa,tail ea], head ea)
+  if length ea > 0
+    then do return ([fi,l,wi,wa,tail ea], head ea)
+  else do return ([fi,l,wi,wa,tail ea], Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  
   | country == "L" || country == "l" = do
-  return ([fi,tail l,wi,wa,ea], head l)
-
-
-
-
+  if length l > 0
+    then do return ([fi,tail l,wi,wa,ea], head l)
+  else do return ([fi,tail l,wi,wa,ea], Ninja "No Ninja" 'f' "" 0.0 0.0 "" "" 0 0.0)
+  
+  | otherwise = do return ([fi,l,wi,wa,ea], Ninja "No Country" 'f' "" 0.0 0.0 "" "" 0 0.0)
+   
+  
 
 ---------------------------------------------------------Functions in Part E--------------------------------------------------------------------
 
